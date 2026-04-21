@@ -1,11 +1,12 @@
 #include "pxt.h"
 #include "jdlow.h"
 #include "mbbridge.h"
+#include "intercepthook.h"
 
 #define FRAME_EXT_FLAG 0x80
 
 #define LOG(msg, ...) DMESG("JDAPP: " msg, ##__VA_ARGS__)
-//#define LOG(...) ((void)0)
+// #define LOG(...) ((void)0)
 
 #define DEVICE_ID DEVICE_ID_JACDAC
 
@@ -90,6 +91,11 @@ int copyAndAppend(LinkedFrame *volatile *q, jd_frame_t *frame, int max, uint8_t 
         free(buf);
         return -1;
     }
+}
+
+// copyAndAppend but as a remote call
+int copyAndAppend(jd_frame_t *frame) {
+    return copyAndAppend(&txQ, frame, MAX_TX, NULL);
 }
 
 extern "C" int app_handle_frame(jd_frame_t *frame) {

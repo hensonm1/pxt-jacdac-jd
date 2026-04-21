@@ -64,7 +64,8 @@
         "servers.ts",
         "version.ts",
         "button/button-smasher.md",
-        "_locales/de/jacdac-strings.json"
+        "_locales/de/jacdac-strings.json",
+        "intercepthook.h"
     ],
     "testFiles": [
         "test.microbit.ts",
