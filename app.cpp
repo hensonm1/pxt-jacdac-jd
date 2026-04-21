@@ -16,6 +16,7 @@
 
 namespace jacdac {
 
+void (*frameReceived)(jd_frame_t *frame) = NULL;
 static inline void raiseEvent(int src, int val) {
 #ifdef PXT_ESP32
     pxt::raiseEvent(src, val);
@@ -101,6 +102,9 @@ int copyAndAppend(jd_frame_t *frame) {
 extern "C" int app_handle_frame(jd_frame_t *frame) {
     // DMESG("PKT t:%d fl:%x %d cmd=%x", (int)current_time_ms(), frame->flags,
     //      ((jd_packet_t *)frame)->service_number, ((jd_packet_t *)frame)->service_command);
+
+    if (frameReceived)
+        frameReceived(frame);
 
     if (copyAndAppend(&rxQ, frame, MAX_RX) < 0) {
         return -1;
